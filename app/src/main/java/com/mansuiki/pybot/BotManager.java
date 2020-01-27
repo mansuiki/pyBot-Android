@@ -8,12 +8,13 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
-public class BotManager {
+public class BotManager implements Observable {
     private static final String TAG = "BotManager";
     private static final BotManager manager = new BotManager();
     public static Context ctx;
     private static ArrayList<KakaoData> savedMsg = new ArrayList<>();
     private static ArrayList<RoomList> roomList = new ArrayList<>();
+    private ArrayList<Observer> observerlist = new ArrayList<>();
 
     public static BotManager getManager() {
         return manager;
@@ -63,6 +64,7 @@ public class BotManager {
         for (RoomList check : roomList.toArray(new RoomList[0])) {
             if (data.room.equals(check.room)) {
                 check.session = data.session;
+                updateOvservers();
                 return;
             }
         }
@@ -72,7 +74,6 @@ public class BotManager {
         temp.session = data.session;
 
         roomList.add(temp);
-
         Log.d(TAG, "Room Added " + "Room : " + temp.room);
     }
 
@@ -96,6 +97,22 @@ public class BotManager {
             savedMsg.remove(index);
         else
             Log.e(TAG, "removeSavedMsg: Not same Session");
+    }
+
+    @Override
+    public void addObserver(Observer o) {
+        observerlist.add(o);
+
+    }
+
+    @Override
+    public void delObserver(Observer o) {
+        observerlist.remove(o);
+    }
+
+    @Override
+    public void updateOvservers() {
+        observerlist.forEach(Observer::update);
     }
 
 

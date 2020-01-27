@@ -13,10 +13,6 @@ import android.util.Log;
 import com.mansuiki.pybot.BotManager.KakaoData;
 import com.mansuiki.pybot.BotManager.RoomList;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
 public class KakaoListener extends NotificationListenerService {
 
     private final static String TAG = "KakaoListener";
@@ -67,19 +63,21 @@ public class KakaoListener extends NotificationListenerService {
             for (Notification.Action act : extender.getActions()) {
                 if ((act.getRemoteInputs() != null) && act.getRemoteInputs().length > 0) {
                     context = getApplicationContext();
-                    if (sbn.getNotification().extras.getCharSequence(Notification.EXTRA_SUB_TEXT) != null) { // 개인톡방 무시
-                        KakaoData data = new KakaoData();
 
-                        data.sender = sbn.getNotification().extras.getString(Notification.EXTRA_TITLE);
-                        data.message = sbn.getNotification().extras.getCharSequence(Notification.EXTRA_TEXT);
-                        data.room = sbn.getNotification().extras.getCharSequence(Notification.EXTRA_SUB_TEXT);
-                        data.session = act;
+                    KakaoData data = new KakaoData();
 
+                    data.sender = sbn.getNotification().extras.getString(Notification.EXTRA_TITLE);
+                    data.message = sbn.getNotification().extras.getCharSequence(Notification.EXTRA_TEXT);
+                    if (sbn.getNotification().extras.getCharSequence(Notification.EXTRA_SUB_TEXT) == null) // 개인톡방
+                        data.room = "::p::" + data.sender;
+                    else
+                        data.room = sbn.getNotification().extras.getCharSequence(Notification.EXTRA_SUB_TEXT); // 단체톡방
+                    data.session = act;
 
-                        BotManager.getManager().addData(data);
+                    BotManager.getManager().addData(data);
 
-                        Log.d(TAG, "ReceiveMsg [[ Room : " + data.room + " Sender : " + data.sender + " message : " + data.message + " ]]");
-                    }
+                    Log.d(TAG, "ReceiveMsg [[ Room : " + data.room + " Sender : " + data.sender + " message : " + data.message + " ]]");
+
                 }
             }
         }
