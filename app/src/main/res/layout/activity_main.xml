@@ -10,40 +10,20 @@
         android:id="@+id/masterSwitch"
         android:layout_width="162dp"
         android:layout_height="74dp"
-        android:layout_marginTop="16dp"
         android:text="ServiceStart?"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/testButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="120dp"
-        android:text="TEST?"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.147"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textResult"
-        android:layout_width="85dp"
-        android:layout_height="44dp"
-        android:layout_marginStart="72dp"
-        android:layout_marginTop="120dp"
-        android:text="Result"
-        app:layout_constraintStart_toEndOf="@+id/testButton"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/notiButton"
-        android:layout_width="63dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="Button"
+        android:layout_width="127dp"
+        android:layout_height="64dp"
+        android:text="권한설정"
+        app:layout_constraintBottom_toTopOf="@+id/masterSwitch"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

@@ -11,37 +11,38 @@ import java.util.ArrayList;
 public class BotManager implements Observable {
     private static final String TAG = "BotManager";
     private static final BotManager manager = new BotManager();
-    public static Context ctx;
+    private static Context ctx;
     private static ArrayList<KakaoData> savedMsg = new ArrayList<>();
     private static ArrayList<RoomList> roomList = new ArrayList<>();
-    private ArrayList<Observer> observerlist = new ArrayList<>();
 
-    public static BotManager getManager() {
+    private Observer observer = null;
+
+    static BotManager getManager() {
         return manager;
     }
 
-    public void setContext(Context context) {
+    void setContext(Context context) {
         ctx = context;
     }
 
 
-    public void start() {
+    void start() {
         Intent intent = new Intent(ctx, CommunicateService.class);
         ctx.startForegroundService(intent);
     }
 
-    public void restart() {
+    void restart() {
         Intent intent = new Intent(ctx, CommunicateService.class);
         ctx.stopService(intent);
         ctx.startForegroundService(intent);
     }
 
-    public void stop() {
+    void stop() {
         Intent intent = new Intent(ctx, CommunicateService.class);
         ctx.stopService(intent);
     }
 
-    public boolean isRunning() {
+    boolean isRunning() {
 
         try {
             ActivityManager activityManager = (ActivityManager) ctx.getSystemService(Context.ACTIVITY_SERVICE);
@@ -58,13 +59,14 @@ public class BotManager implements Observable {
     }
 
 
-    public void addData(KakaoData data) {
+    void addData(KakaoData data) {
         savedMsg.add(data);
 
         for (RoomList check : roomList.toArray(new RoomList[0])) {
             if (data.room.equals(check.room)) {
                 check.session = data.session;
-                updateOvservers();
+                if (observer != null)
+                    observer.update();
                 return;
             }
         }
@@ -74,24 +76,26 @@ public class BotManager implements Observable {
         temp.session = data.session;
 
         roomList.add(temp);
+        if (observer != null)
+            observer.update();
         Log.d(TAG, "Room Added " + "Room : " + temp.room);
     }
 
-    public void resetData() {
+    void resetData() {
         savedMsg.clear();
         Log.d(TAG, "Clear savedData");
     }
 
 
-    public ArrayList<RoomList> getRoom() {
+    ArrayList<RoomList> getRoom() {
         return roomList;
     }
 
-    public ArrayList<KakaoData> getSavedMsg() {
+    ArrayList<KakaoData> getSavedMsg() {
         return savedMsg;
     }
 
-    public void removeSavedMsg(int index, KakaoData data) {
+    void removeSavedMsg(int index, KakaoData data) {
         KakaoData temp = savedMsg.get(index);
         if ((data.room == temp.room) && (data.message == temp.message))
             savedMsg.remove(index);
@@ -101,22 +105,15 @@ public class BotManager implements Observable {
 
     @Override
     public void addObserver(Observer o) {
-        observerlist.add(o);
-
+        observer = o;
     }
 
     @Override
     public void delObserver(Observer o) {
-        observerlist.remove(o);
+        observer = o;
     }
 
-    @Override
-    public void updateOvservers() {
-        observerlist.forEach(Observer::update);
-    }
-
-
-    public static class KakaoData {
+    static class KakaoData {
         String sender = "";
         CharSequence message = "";
         CharSequence room = "";
@@ -124,7 +121,7 @@ public class BotManager implements Observable {
         Notification.Action session;
     }
 
-    public static class RoomList {
+    static class RoomList {
         CharSequence room = "";
         Notification.Action session;
     }

@@ -16,15 +16,10 @@ public class CommunicateService extends Service {
     private static boolean isStart = false;
     private static Communicator communicator;
 
-    public static Communicator getCommunicator() {
-        return communicator;
-    }
-
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
 
-        //TODO 작성하자 !!!!!
         communicator = new Communicator();
         communicator.start();
         isStart = true;
