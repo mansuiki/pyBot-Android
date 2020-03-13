@@ -14,11 +14,11 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <service
-            android:name=".CommunicateService"
+            android:name=".ui.background.CommunicateService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true"/>
         <service
-            android:name=".KakaoListener"
+            android:name=".ui.background.KakaoListener"
             android:label="Notification Listener for KakaoTalk Notification"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
             <intent-filter>
@@ -26,7 +26,7 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

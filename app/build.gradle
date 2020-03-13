@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 29
@@ -21,6 +23,13 @@ android {
         targetCompatibility = "8"
         sourceCompatibility = "8"
     }
+    viewBinding {
+        enabled = true
+    }
+}
+
+repositories {
+    mavenCentral()
 }
 
 dependencies {
@@ -36,4 +45,6 @@ dependencies {
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    implementation "androidx.core:core-ktx:+"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
